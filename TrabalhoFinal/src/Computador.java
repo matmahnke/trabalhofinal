@@ -13,9 +13,16 @@ import javax.swing.JOptionPane;
  * @author Matheus
  */
 public class Computador {
+
     private String Nome;
     private USB[] USB;
     private Paralela[] Paralela;
+
+    public Computador(String nome, int nPortasUSB, int nPortasPar) {   
+        this.setNome(nome);
+        this.USB = new USB[nPortasUSB];
+        this.Paralela = new Paralela[nPortasPar];
+    }
 
     public String getNome() {
         return Nome;
@@ -26,27 +33,56 @@ public class Computador {
     }
 
     public void conectarUSB(USB disp) {
-            this.USB = new USB[USB.length + 1];
-            disp.setNome("USB" + USB.length);
-            disp.setPorta(USB.length+Paralela.length);
-            disp.setUnidade((char)disp.getPorta());
-            if(!disp.isConectado())
-                disp.setConectado(true);
-            else
-                JOptionPane.showInputDialog("Dispositivo já está conectado em outro lugar");
-            this.USB[USB.length] = disp;
+        int numero = 0;
+        int porta = 0;
+        for (int i = 0; i < USB.length; i++) {
+            if (USB[i] == null) {
+                numero = i;
+                porta += i;
+                break;
+            }
+        }
+        for (int i = 0; i < Paralela.length; i++) {
+            if (Paralela[i] == null) {
+                porta += i;
+            }
+        }
+        disp.setNome("USB" + numero);
+        disp.setPorta(porta);
+        disp.setUnidade((char) disp.getPorta());
+        if (!disp.isConectado()) {
+            disp.setConectado(true);
+        } else {
+            JOptionPane.showInputDialog("Dispositivo já está conectado em outro lugar");
+        }
+        this.USB[numero] = disp;
     }
-    public void conectarPar(Paralela disp){
-            this.Paralela = new Paralela[Paralela.length + 1];
-            disp.setNome("PAR" + Paralela.length);
-            disp.setPorta(Paralela.length+USB.length);
-            disp.setUnidade((char)disp.getPorta());
-            if(!disp.isConectado())
-                disp.setConectado(true);
-            else
-                JOptionPane.showInputDialog("Dispositivo já está conectado em outro lugar");
-            this.Paralela[Paralela.length] = disp;
-        
+
+    public void conectarPar(Paralela disp) {
+        int numero = 0;
+        int porta = 0;
+        for (int i = 0; i < Paralela.length; i++) {
+            if (Paralela[i] == null) {
+                numero = i;
+                porta += i;
+                break;
+            }
+        }
+        for (int i = 0; i < USB.length; i++) {
+            if (USB[i] == null) {
+                porta += i;
+            }
+        }
+        disp.setNome("PAR" + numero);
+        disp.setPorta(porta);
+        disp.setUnidade((char) disp.getPorta());
+        if (!disp.isConectado()) {
+            disp.setConectado(true);
+        } else {
+            JOptionPane.showInputDialog("Dispositivo já está conectado em outro lugar");
+        }
+        this.Paralela[numero] = disp;
+
     }
 
     public void trazPastasArquivos() {
